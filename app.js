@@ -1,17 +1,24 @@
-const { readFile } = require("fs")
-const { result } = require("lodash")
-const path = require("path")
+/* exercise four */
 
-const getText = (path) => {
-    return new Promise((resolve, reject) => {
-        readFile(path, "utf8", (err, data) =>{
-            if (err) {
-                reject(err)
-            } else {
-                resolve(data)
+const http = require("http")
+
+const server = http.createServer( (req, res)=> {
+    if(req.url === "/") {
+        res.end("Home Page")
+        return
+    } if(req.url === "/about") {
+        //bloking code
+        for(let i = 0; i < 1000; i++) {
+            for(let j = 0; j < 100; j++) {
+                console.log(`${i} ${j}`)
             }
-        })
-    })
-}
+        }
+        res.end("About Page")
+        return
+    } else {res.end("Error Page")}
+})
 
-getText("./content/first.txt").then(result => console.log(result)).catch(err => console.log(err))
+server.listen(5000, () => {
+    console.log("Server listening on port : 5000....")
+})
+
