@@ -1,24 +1,29 @@
-/* exercise four */
+const http = require("http");
 
-const http = require("http")
+//const server = http.createServer((req, res) => {
+//    res.end("Welcome")
+//})
 
-const server = http.createServer( (req, res)=> {
-    if(req.url === "/") {
-        res.end("Home Page")
-        return
-    } if(req.url === "/about") {
-        //bloking code
-        for(let i = 0; i < 1000; i++) {
-            for(let j = 0; j < 100; j++) {
-                console.log(`${i} ${j}`)
-            }
-        }
+// Using Event Emitter API
+
+const server = http.createServer()
+// emits request event
+// subscribe to it / listen for it / respond to it
+server.on("request", (req, res) => {
+    if(req.url ==="/") {
+        res.end("Welcome to our home page")
+    } else if (req.url ==="/about") {
         res.end("About Page")
-        return
-    } else {res.end("Error Page")}
+    } else {
+        res.end("Error Page")
+    }
+    
 })
 
-server.listen(5000, () => {
-    console.log("Server listening on port : 5000....")
-})
+server.listen(5000)
+
+
+
+
+
 
