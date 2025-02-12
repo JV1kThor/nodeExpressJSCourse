@@ -9,8 +9,6 @@ const authorize = (req, res, next)=> {
         res.status(401).send("Unauthorized")
         return
     }
-    
-    
 }
 
 module.exports = [authorize]
