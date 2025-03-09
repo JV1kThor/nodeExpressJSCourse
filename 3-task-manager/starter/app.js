@@ -1,26 +1,28 @@
 const express = require("express");
 const app = express();
-const taskRouts = require("./routes/tasks");
+const taskRoutes = require("./routes/tasks");
 const connectDB = require("./db/connect")
 require("dotenv").config()
+const notFound = require("./middleware/not-found")
+const errorHandlerMiddleware = require("./middleware/error-handler")
 
 //middleware functions
 
-// app.use(express.static("./public"))
+app.use(express.static("./public"))
 app.use(express.json())
 // app.use(express.urlencoded({extended: false}))
 
-app.get("/hello", (req, res)=> {
-    res.send("Task manager app")
-    return
-})
+
 /*
 app.get("/", (req, res)=> {
     res.sendFile("./public/index.html")
 })
 */
-app.use("/api/v1/tasks/", taskRouts)
-const port = 3000
+app.use("/api/v1/tasks/", taskRoutes)
+const port = /*process.env.PORT || */ 3000
+
+app.use(notFound) // must be places AFTER ROUTS !!!!
+app.use(errorHandlerMiddleware)
 
 const start = async () =>{
     try {
@@ -30,6 +32,7 @@ const start = async () =>{
 }
 
 start()
+
 
 /*
 
