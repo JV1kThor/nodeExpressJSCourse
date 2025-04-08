@@ -16,12 +16,22 @@ const getAllJobs = async (req, res) => {
 
 const getJob = async (req, res) => {
     const jobId = req.params.id
+    const userTheJob = await Job.findOne({ createdBy: req.user.userId, _id: jobId })
     // console.log(req.user.userId)
     // console.log(jobId)
-    const userTheJob = await Job.findOne({ createdBy: req.user.userId, _id: jobId })
-    if (!userTheJob) {
-        throw new NotFoundError(`No job with id: ${jobId}`)
+
+    /*
+    // my version - smigla did it in the middleware
+    try {
+        const userTheJob = await Job.findOne({ createdBy: req.user.userId, _id: jobId })
+        console.log(userTheJob)
+    } catch (error) {
+        if (error.name === "CastError") {
+            throw new NotFoundError(`No job with id: ${jobId}`)
+        }
     }
+*/
+ 
     res.status(StatusCodes.OK).json({ job: userTheJob })
 
     // console.log(myUserJobs)
