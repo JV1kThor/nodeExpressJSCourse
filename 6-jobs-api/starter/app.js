@@ -1,22 +1,46 @@
 require("dotenv").config();
 require("express-async-errors");
-const express = require("express");
+
+// extra security packages
+
+const helmet = require("helmet");
+const cors = require("cors");
+const xss = require("xss-clean")
+const rateLimiter = require("express-rate-limit");
+
+
+const express = require("express"); 
 const app = express();
+
+// database
+
+const connectDB = require("./db/connect");
+
+// routers
 
 const jobsRouter = require("./routes/jobs-router");
 const authRouter = require("./routes/auth");
 const websiteRouter = require("./routes/website-routs");
-const connectDB = require("./db/connect");
 
-// middleware
+// error handling
 
-app.use(express.json());
 const notFoundMiddleware = require("./middleware/not-found");
 const errorHandlerMiddleware = require("./middleware/error-handler");
 const authenticationMiddleware = require("./middleware/authentication")
 
+// middleware
+app.set("trust proxy", 1); 
+app.use(rateLimiter({
+    windowMs: 15*60*1000, // 15 minutes
+    max: 100 // max number of requests per IP 
+})); 
+app.use(express.json());
+app.use(helmet);
+app.use(cors);
+app.use(xss);
 
-// database
+
+
 
 // routes
 
